@@ -85,6 +85,8 @@ wget -q "${DOT_BASE}/.tmux.conf" -O .tmux.conf
 wget -q "${DOT_BASE}/.bash_aliases_docker" -O .bash_aliases_docker
 wget -q "${DOT_BASE}/.bash_aliases" -O .bash_aliases
 wget -q "${DOT_BASE}/.bash_functions" -O .bash_functions
+wget -q "${DOT_BASE}/ips.sh" -O .tmux/ips.sh 
+
 
 sudo chown "$MYUSER:$MYUSER" \
   "$HOME_DIR/.tmux.conf" \
