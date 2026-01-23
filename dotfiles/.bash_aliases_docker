@@ -1,0 +1,36 @@
+alias autorecondocker='docker run --rm --network host -t -v "${PWD}:/results" -v "/usr/share/seclists:/usr/share/seclists" suezawa/autorecon' 
+alias autoreconconsole='docker run  --rm --network host -it --entrypoint=/bin/bash -v /"${PWD}:/results" -v "/usr/share/seclists:/usr/share/seclists" suezawa/autorecon'
+
+alias dockershell='docker run --rm --network host  -it --entrypoint=/bin/bash'
+alias dockershellsh='docker run --rm --network host  -it --entrypoint=/bin/bash'
+
+alias impacketpython3='docker run  --rm --network host  -it -v "${PWD}:/results" -v "${HOME}/targetTools:/mystuff" -v "/usr/share/seclists:/usr/share/seclists" rflathers/impacket'
+alias impacketconsole3='docker run  --rm --network host -i -t --entrypoint=/bin/sh -v "${PWD}:/myhome" -v "${HOME}/targetTools:/mystuff" -v "/usr/share/seclists:/usr/share/seclists" rflathers/impacket'
+
+alias impacketpython2='docker run  --rm -it --network host -v "${HOME}/targetTools:/mystuff" -v "/usr/share/seclists:/usr/share/seclists" impacket'
+alias impacketconsole2='docker run   --rm -it --network host --entrypoint=/bin/sh -v "${HOME}/targetTools:/mystuff" -v "/usr/share/seclists:/usr/share/seclists" impacket'
+
+alias ffufdocker='docker run  --rm -it --network host -v $(pwd):/var/reports -v "/usr/share/seclists:/usr/share/seclists" ffuf-docker -recursion -recursion-depth 5 -t 200 -r -recursion-strategy greedy -u http://$targetIP/FUZZ' 
+alias ffufdockerconsole='docker run  --rm -it --network host --entrypoint=/bin/bash -ti -v $(pwd):/var/reports -v "/usr/share/seclists:/usr/share/seclists" ffuf-docker -recursion -recursion-depth 5 -t 200 -r -recursion-strategy greedy -u http://$targetIP/FUZZ' 
+
+
+alias evilwinrm='docker run --rm -ti --network host  -v "${HOME}/targetTools/ps1_scripts:/ps1_scripts" -v "${HOME}/targetTools/exe_files:/exe_files" -v "${PWD}:/data" oscarakaelvis/evil-winrm  -s '/ps1_scripts/' -e '/exe_files/' -i $TARGET -u "$TARGETID" -p "$TARGETPASS"'
+alias evilwinrmconsole='docker run --rm  --network host --entrypoint=/bin/sh -ti -v "${HOME}/targetTools/ps1_scripts:/ps1_scripts" -v "${HOME}/targetTools/exe_files:/exe_files" -v "${PWD}:/data" oscarakaelvis/evil-winrm  -s '/ps1_scripts/' -e '/exe_files/''
+
+alias feroxbusterdocker='docker run --rm -it --network host -v "${PWD}:/results" -v "/usr/share/seclists:/usr/share/seclists" epi052/feroxbuster --force-recursion -u http://$targetIP'
+alias feroxbusterdockerconsole='docker run --rm -it --entrypoint=/bin/sh -v "${PWD}:/results" --network host -v "/usr/share/seclists:/usr/share/seclists" epi052/feroxbuster -'
+
+alias hydradocker='docker run --rm --network host -t -v "${PWD}:/results" -v "/usr/share/seclists:/usr/share/seclists" tarampampam/hydra:9.3.0'
+alias hydradockerconsole='docker run --rm --network host -it --entrypoint=/bin/bash -v "${PWD}:/results" -v "/usr/share/seclists:/usr/share/seclists" tarampampam/hydra:9.3.0'
+
+alias metasploitdocker='docker run --network host -it --rm metasploitframework/metasploit-framework'
+alias msfvenomdocker='docker run --rm -it -v "${HOME}/.msf4:/home/msf/.msf4" -v "${PWD}:/data" metasploitframework/metasploit-framework ./msfvenom'
+
+alias burpdocker='docker run -d --name burpsuite -e DISPLAY -v ${HOME}:/home/burpsuite -v /tmp/.X11-unix/:/tmp/.X11-unix/ -v /etc/localtime:/etc/localtime:ro -p 8080:8080 alexandreoda/burpsuite'
+
+#vulnerable images
+alias dvwa='docker run --name dvwa --rm -it -p 80:80 vulnerables/web-dvwa'
+
+
+
+
