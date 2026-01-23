@@ -215,6 +215,18 @@ sudo visudo -cf "$SUDOERS_FILE"
 log "Sudoers configuration validated successfully."
 
 # -----------------------------
+# Penelope shell handler install 
+# -----------------------------
+echo
+echo "✅ INstalling penelope shell handler"
+echo "   "
+echo
+
+pipx install penelope-shell-handler
+
+log "penelope shell handler..."
+
+# -----------------------------
 # Cleanup
 # -----------------------------
 log "Final cleanup..."
