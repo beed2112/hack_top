@@ -98,7 +98,7 @@ sudo chown "$MYUSER:$MYUSER" \
   "$HOME_DIR/.bash_functions" || true
 
 # -----------------------------
-# hack_club install (idempotent)
+# hack_club install 
 # -----------------------------
 log "Installing hack_club assets..."
 HACKCLUB_DIR="/tmp/hack_club"
@@ -126,7 +126,7 @@ else
 fi
 
 # -----------------------------
-# Append to user's .bashrc (idempotent)
+# Append to user's .bashrc
 # -----------------------------
 log "Updating $HOME_DIR/.bashrc to source aliases/functions and run fastfetch..."
 
@@ -218,7 +218,7 @@ log "Sudoers configuration validated successfully."
 # Penelope shell handler install 
 # -----------------------------
 echo
-echo "✅ INstalling penelope shell handler"
+echo "✅ Installing penelope shell handler"
 echo "   "
 echo
 
