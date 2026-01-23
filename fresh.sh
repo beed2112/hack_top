@@ -24,11 +24,11 @@ sudo apt full-upgrade -y
 # -----------------------------
 # Install core packages
 # -----------------------------
-log "Installing core packages (seclists, fastfetch, 7zip, jq, docker.io)..."
-sudo apt install -y seclists fastfetch p7zip-full jq docker.io
-
-log "Installing docker compose plugin..."
-sudo apt install -y docker-compose-plugin
+log "Installing core packages..."
+sudo apt install -y \
+  seclists fastfetch p7zip-full jq \
+  docker.io docker-compose-plugin \
+  git rsync
 
 # -----------------------------
 # Extract rockyou.txt to /usr/share/wordlists
@@ -72,34 +72,33 @@ sudo apt update
 sudo apt install -y code
 
 # -----------------------------
-# Pull dotfiles from GitHub
+# Pull dotfiles from GitHub (and ~/.tmux assets)
 # -----------------------------
 log "Downloading dotfiles into $HOME_DIR ..."
 cd "$HOME_DIR"
 
-# Canonical raw URLs: https://raw.githubusercontent.com/<user>/<repo>/<branch>/<path>
+mkdir -p "$HOME_DIR/.tmux"
+
 DOT_BRANCH="masterOfAll"
 DOT_BASE="https://raw.githubusercontent.com/beed2112/hack_top/${DOT_BRANCH}/dotfiles"
 
-wget -q "${DOT_BASE}/.tmux.conf" -O .tmux.conf
-wget -q "${DOT_BASE}/.bash_aliases_docker" -O .bash_aliases_docker
-wget -q "${DOT_BASE}/.bash_aliases" -O .bash_aliases
-wget -q "${DOT_BASE}/.bash_functions" -O .bash_functions
-wget -q "${DOT_BASE}/ips.sh" -O .tmux/ips.sh 
+wget -q "${DOT_BASE}/.tmux.conf"           -O "$HOME_DIR/.tmux.conf"
+wget -q "${DOT_BASE}/.bash_aliases_docker" -O "$HOME_DIR/.bash_aliases_docker"
+wget -q "${DOT_BASE}/.bash_aliases"        -O "$HOME_DIR/.bash_aliases"
+wget -q "${DOT_BASE}/.bash_functions"      -O "$HOME_DIR/.bash_functions"
+wget -q "${DOT_BASE}/ips.sh"               -O "$HOME_DIR/.tmux/ips.sh"
 
+chmod +x "$HOME_DIR/.tmux/ips.sh" || true
 
+sudo chown -R "$MYUSER:$MYUSER" "$HOME_DIR/.tmux" || true
 sudo chown "$MYUSER:$MYUSER" \
   "$HOME_DIR/.tmux.conf" \
   "$HOME_DIR/.bash_aliases_docker" \
   "$HOME_DIR/.bash_aliases" \
   "$HOME_DIR/.bash_functions" || true
 
-# If you truly intended to create ~/.tmux for plugins/config:
-mkdir -p "$HOME_DIR/.tmux"
-sudo chown -R "$MYUSER:$MYUSER" "$HOME_DIR/.tmux" || true
-
 # -----------------------------
-# hack_club install 
+# hack_club install (idempotent)
 # -----------------------------
 log "Installing hack_club assets..."
 HACKCLUB_DIR="/tmp/hack_club"
@@ -138,7 +137,6 @@ if [[ ! -f "$BASHRC_FILE" ]]; then
 fi
 
 BASHRC_MARKER="# --- pentest dotfiles (added by setup script) ---"
-
 if ! grep -qF "$BASHRC_MARKER" "$BASHRC_FILE"; then
   cat >> "$BASHRC_FILE" <<'EOF'
 
@@ -162,19 +160,22 @@ esac
 # --- end pentest dotfiles ---
 EOF
 fi
-
 sudo chown "$MYUSER:$MYUSER" "$BASHRC_FILE" || true
 
 # -----------------------------
-# Create vault
+# Create vault (idempotent fetch + sync)
 # -----------------------------
 log "Creating vault ..."
 mkdir -p "$HOME_DIR/Documents/vaults"
 
-cd /tmp
-git clone https://github.com/beed2112/obs.git   
-cd obs
-mv main "$HOME_DIR/Documents/vaults/main"
+rm -rf /tmp/obs
+git clone --depth 1 https://github.com/beed2112/obs.git /tmp/obs
+
+DEST="$HOME_DIR/Documents/vaults/main"
+mkdir -p "$DEST"
+rsync -a --delete /tmp/obs/main/ "$DEST/"
+
+sudo chown -R "$MYUSER:$MYUSER" "$HOME_DIR/Documents/vaults" || true
 
 # -----------------------------
 # Install Nerd Fonts (clone + install)
@@ -195,7 +196,6 @@ sudo chown -R "$MYUSER:$MYUSER" "$HOME_DIR/gitspace" || true
 # Configure passwordless sudo for pentest tools
 # -----------------------------
 log "Creating /etc/sudoers.d/pentest-nopasswd..."
-
 SUDOERS_FILE="/etc/sudoers.d/pentest-nopasswd"
 
 sudo tee "$SUDOERS_FILE" >/dev/null <<EOF
