@@ -99,7 +99,7 @@ mkdir -p "$HOME_DIR/.tmux"
 sudo chown -R "$MYUSER:$MYUSER" "$HOME_DIR/.tmux" || true
 
 # -----------------------------
-# hack_club install (idempotent)
+# hack_club install 
 # -----------------------------
 log "Installing hack_club assets..."
 HACKCLUB_DIR="/tmp/hack_club"
@@ -166,19 +166,15 @@ fi
 sudo chown "$MYUSER:$MYUSER" "$BASHRC_FILE" || true
 
 # -----------------------------
-# Create link to vaults
+# Create vault
 # -----------------------------
-log "Creating vaults symlink..."
-mkdir -p "$HOME_DIR/Documents"
+log "Creating vault ..."
+mkdir -p "$HOME_DIR/Documents/vaults"
 
-VAULT_TARGET="/media/freewill/$MYUSER/vaults"
-VAULT_LINK="$HOME_DIR/Documents/vaults"
-
-if [[ -e "$VAULT_LINK" || -L "$VAULT_LINK" ]]; then
-  echo "INFO: $VAULT_LINK already exists; skipping symlink."
-else
-  ln -s "$VAULT_TARGET" "$VAULT_LINK"
-fi
+cd /tmp
+git clone https://github.com/beed2112/obs.git   
+cd obs
+mv main "$HOME_DIR/Documents/vaults/main"
 
 # -----------------------------
 # Install Nerd Fonts (clone + install)
